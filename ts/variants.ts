@@ -120,7 +120,10 @@ export async function newQuickJSAsyncWASMModule(
 export function memoizePromiseFactory<T>(fn: () => Promise<T>): () => Promise<T> {
   let promise: Promise<T> | undefined
   return () => {
-    return (promise ??= fn())
+    // Changed from ES12 to earlier syntax:
+    // From: x ??= y
+    // To:   x ?? (x = y)
+    return (promise ?? (promise = fn()))
   }
 }
 

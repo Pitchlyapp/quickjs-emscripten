@@ -89,10 +89,13 @@ let singletonPromise: Promise<QuickJSWASMModule> | undefined = undefined
  * - {@link newQuickJSAsyncWASMModule}.
  */
 export async function getQuickJS(): Promise<QuickJSWASMModule> {
-  singletonPromise ??= newQuickJSWASMModule().then((instance) => {
+  // Changed from ES12 to earlier syntax:
+  // From: x ??= y
+  // To:   x ?? (x = y)
+  singletonPromise ?? (singletonPromise = newQuickJSWASMModule().then((instance) => {
     singleton = instance
     return instance
-  })
+  }))
   return await singletonPromise
 }
 
